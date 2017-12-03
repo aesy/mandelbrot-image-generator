@@ -26,7 +26,7 @@ public class MandelbrotFractal implements EscapeTimeFractal {
         Complex c = new Complex(x.doubleValue(), y.doubleValue());
 
         // Escape early if outside a radius of 2 as the point is then guaranteed to diverge
-        while (iterations.compareTo(maxIterations) <= 0 && z.abs() <= 2) {
+        while (iterations.compareTo(maxIterations) < 0 && z.abs() <= 2) {
             z = z.multiply(z)
                  .add(c);
 
@@ -38,6 +38,6 @@ public class MandelbrotFractal implements EscapeTimeFractal {
 
     @Override
     public boolean isBound(BigDecimal x, BigDecimal y) {
-        return sample(x, y).compareTo(maxIterations) == 0;
+        return sample(x, y).compareTo(maxIterations) >= 0;
     }
 }
