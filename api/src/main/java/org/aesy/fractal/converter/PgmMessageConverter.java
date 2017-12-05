@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Provider of response/request conversion between Bufferedimage <-> PGM encoded bytes.
+ */
 public class PgmMessageConverter extends AbstractHttpMessageConverter<BufferedImage> {
     public PgmMessageConverter() {
         super(new MediaType("image", "x-portable-graymap"));
