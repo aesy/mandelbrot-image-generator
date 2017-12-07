@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.concurrent.Callable;
 
 /**
- * Task that makes a HTTP requests to recieve an image which is then painted onto another image.
+ * Task that makes a HTTP request to recieve an image which is then painted onto another image.
  */
 public class ImageSubDivisionGeneratorTask implements Callable<Void> {
     private final URL server;
