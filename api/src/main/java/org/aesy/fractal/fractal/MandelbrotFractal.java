@@ -30,20 +30,21 @@ public class MandelbrotFractal implements EscapeTimeFractal {
     }
 
     /**
-     * Samples a point in the complex plane to determine the amount of iterations until the point diverges.
+     * Samples a point in the complex plane to determine the amount of iterations until the point diverges, or the
+     * maximum amount of allowed iterations, whichever is smaller.
      *
-     * @param x The real part of the point c.
-     * @param y The imaginary part of the point c.
+     * @param real The real part of the point c.
+     * @param imaginary The imaginary part of the point c.
      * @return The amount of iterations until divergence.
      */
     @Override
-    public BigInteger sample(BigDecimal x, BigDecimal y) {
+    public BigInteger sample(BigDecimal real, BigDecimal imaginary) {
         BigInteger iterations = BigInteger.ZERO;
         Complex z = Complex.ZERO;
         // TODO use arbitrary precision complex number
-        Complex c = new Complex(x.doubleValue(), y.doubleValue());
+        Complex c = new Complex(real.doubleValue(), imaginary.doubleValue());
 
-        // Escape early if outside a radius of 2 as the point is then guaranteed to diverge
+        // Escape early if 'z' is outside a radius of 2 as the point is then guaranteed to diverge
         while (iterations.compareTo(maxIterations) < 0 && z.abs() <= 2) {
             z = z.multiply(z)
                  .add(c);
@@ -54,8 +55,15 @@ public class MandelbrotFractal implements EscapeTimeFractal {
         return iterations;
     }
 
+    /**
+     * Samples a point to determine whether the point remains bounded.
+     *
+     * @param real The real part of the point c.
+     * @param imaginary The imaginary part of the point c.
+     * @return An indication whether the point remains bounded.
+     */
     @Override
-    public boolean isBounded(BigDecimal x, BigDecimal y) {
-        return sample(x, y).compareTo(maxIterations) >= 0;
+    public boolean isBounded(BigDecimal real, BigDecimal imaginary) {
+        return sample(real, imaginary).compareTo(maxIterations) >= 0;
     }
 }
