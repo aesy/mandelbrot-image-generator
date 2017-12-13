@@ -51,4 +51,4 @@ Example usage: `java -jar target/api-1.0.0.jar -1 -1.5 2 1.5 1024 10000 10000 4 
 
 ### License
 
-mandelbrot-service is licensed under the MIT License (see [LICENSE](./blob/master/LICENSE) file).
+mandelbrot-image-generator is licensed under the MIT License (see [LICENSE](./blob/master/LICENSE) file).
