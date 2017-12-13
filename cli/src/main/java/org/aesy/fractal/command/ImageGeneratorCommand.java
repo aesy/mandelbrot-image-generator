@@ -14,7 +14,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +25,7 @@ import static picocli.CommandLine.Parameters;
  * combines the results into one image. The resulting image is saved in the working directory as a
  * binary PGM (portable graymap map).
  */
-public class ImageGeneratorCommand implements Callable<Void> {
+public class ImageGeneratorCommand implements Runnable {
     @Parameters(index = "0")
     private Double min_c_re;
 
@@ -55,12 +54,11 @@ public class ImageGeneratorCommand implements Callable<Void> {
     private List<URL> hosts;
 
     @Override
-    public Void call() throws MalformedURLException {
+    public void run() {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         List<ImageSubDivider.SubDivision> subDividedImages = new ImageSubDivider(divisions, divisions).divide(image);
 
-        // Only make one http request per server at a time.
-        ExecutorService threadPool = Executors.newFixedThreadPool(hosts.size());
+        ExecutorService threadPool = Executors.newCachedThreadPool();
         double realRange = max_c_re - min_c_re;
         double imaginaryRange = max_c_im - min_c_im;
 
@@ -86,7 +84,14 @@ public class ImageGeneratorCommand implements Callable<Void> {
                                  .add(Integer.toString(max_n))
                                  .toString();
 
-            URL url = new URL(host, resource);
+            URL url;
+            try {
+                url = new URL(host, resource);
+            } catch (MalformedURLException exception) {
+                System.err.println("An exception was thrown while performing mandelbrot image generation task: " +
+                                   exception.getMessage());
+                return;
+            }
 
             threadPool.submit(new ImageSubDivisionGeneratorTask(url, subDividedImage));
         }
@@ -98,7 +103,7 @@ public class ImageGeneratorCommand implements Callable<Void> {
         } catch (InterruptedException exception) {
             System.err.println("An exception was thrown while performing mandelbrot image generation task: "
                                + exception.getMessage());
-            return null;
+            return;
         }
 
         File file = new File("output.pgm");
@@ -109,8 +114,7 @@ public class ImageGeneratorCommand implements Callable<Void> {
         } catch (ImageWriteException | IOException exception) {
             System.err.println("An exception was thrown while writing image to disk: "
                                + exception.getMessage());
+            return;
         }
-
-        return null;
     }
 }

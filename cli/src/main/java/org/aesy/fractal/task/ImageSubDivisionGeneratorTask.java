@@ -11,12 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.Callable;
 
 /**
  * Task that makes a HTTP request to recieve an image which is then painted onto another image.
  */
-public class ImageSubDivisionGeneratorTask implements Callable<Void> {
+public class ImageSubDivisionGeneratorTask implements Runnable {
     private final URL server;
     private final BufferedImage image;
 
@@ -33,7 +32,7 @@ public class ImageSubDivisionGeneratorTask implements Callable<Void> {
      * @return Always returns null.
      */
     @Override
-    public Void call() {
+    public void run() {
         HttpURLConnection connection = null;
 
         try {
@@ -58,7 +57,5 @@ public class ImageSubDivisionGeneratorTask implements Callable<Void> {
                 connection.disconnect();
             }
         }
-
-        return null;
     }
 }
