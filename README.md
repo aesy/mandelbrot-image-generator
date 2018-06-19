@@ -45,10 +45,6 @@ of server URLs must be provided. The resulting image is saved as `output.pgm` in
 
 Example usage: `java -jar target/api-1.0.0.jar -1 -1.5 2 1.5 1024 10000 10000 4 http://localhost:4444 http://localhost:3333` 
 
-### Issues
-
-* Complex arithmetic use double precision, but should use arbitrary precision.
-
 ### License
 
 mandelbrot-image-generator is licensed under the MIT License (see [LICENSE](./blob/master/LICENSE) file).

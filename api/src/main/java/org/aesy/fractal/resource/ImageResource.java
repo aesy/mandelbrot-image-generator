@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.math.MathContext;
 
 @RestController
 public class ImageResource {
@@ -50,7 +51,7 @@ public class ImageResource {
         @NotNull @PathVariable("y") Integer height,
         @NotNull @PathVariable("inf_n") Integer maxIterations
     ) {
-        EscapeTimeFractal fractal = new MandelbrotFractal(maxIterations);
+        EscapeTimeFractal fractal = new MandelbrotFractal(maxIterations, MathContext.UNLIMITED);
         ColorGradient colorSampler = new SimpleClampedLinearGradient(0, maxIterations, Color.BLACK, Color.WHITE);
         FractalImageGenerator imageGenerator = new MultiThreadedFractalImageGenerator(fractal, colorSampler, minReal,
                                                                                       maxReal, minImaginary, maxImaginary);
