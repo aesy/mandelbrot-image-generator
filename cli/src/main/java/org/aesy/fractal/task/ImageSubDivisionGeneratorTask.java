@@ -28,9 +28,6 @@ public class ImageSubDivisionGeneratorTask implements Runnable {
         this.image = image;
     }
 
-    /**
-     * @return Always returns null.
-     */
     @Override
     public void run() {
         HttpURLConnection connection = null;

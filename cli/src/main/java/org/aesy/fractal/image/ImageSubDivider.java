@@ -40,8 +40,8 @@ public class ImageSubDivider {
     private final int verticalDivisions;
 
     /**
-     * @param horizontalDivisions
-     * @param verticalDivisions
+     * @param horizontalDivisions The amount of horizontal subdivisions.
+     * @param verticalDivisions The amount of vertical subdivisions.
      */
     public ImageSubDivider(int horizontalDivisions, int verticalDivisions) {
         this.horizontalDivisions = horizontalDivisions;
