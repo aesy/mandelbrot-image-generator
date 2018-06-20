@@ -66,8 +66,8 @@ public class MandelbrotFractal implements EscapeTimeFractal {
 
         // Escape early if 'z' is outside a radius of 2 as the point is then guaranteed to diverge
         while (iterations.compareTo(maxIterations) < 0 && z.abs(context).compareTo(TWO) <= 0) {
-            z = z.multiply(z)
-                 .add(c);
+            z = z.multiply(z, context)
+                 .add(c, context);
 
             iterations = iterations.add(BigInteger.ONE);
         }

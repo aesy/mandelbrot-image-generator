@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotNull;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 
 @RestController
@@ -43,18 +45,20 @@ public class ImageResource {
     )
     @ResponseBody
     public ResponseEntity<BufferedImage> mandelbrot(
-        @NotNull @PathVariable("min_c_re") Double minReal,
-        @NotNull @PathVariable("min_c_im") Double minImaginary,
-        @NotNull @PathVariable("max_c_re") Double maxReal,
-        @NotNull @PathVariable("max_c_im") Double maxImaginary,
+        @NotNull @PathVariable("min_c_re") BigDecimal minReal,
+        @NotNull @PathVariable("min_c_im") BigDecimal minImaginary,
+        @NotNull @PathVariable("max_c_re") BigDecimal maxReal,
+        @NotNull @PathVariable("max_c_im") BigDecimal maxImaginary,
         @NotNull @PathVariable("x") Integer width,
         @NotNull @PathVariable("y") Integer height,
-        @NotNull @PathVariable("inf_n") Integer maxIterations
+        @NotNull @PathVariable("inf_n") BigInteger maxIterations
     ) {
-        EscapeTimeFractal fractal = new MandelbrotFractal(maxIterations, MathContext.UNLIMITED);
-        ColorGradient colorSampler = new SimpleClampedLinearGradient(0, maxIterations, Color.BLACK, Color.WHITE);
-        FractalImageGenerator imageGenerator = new MultiThreadedFractalImageGenerator(fractal, colorSampler, minReal,
-                                                                                      maxReal, minImaginary, maxImaginary);
+        MathContext context = MathContext.UNLIMITED;
+        EscapeTimeFractal fractal = new MandelbrotFractal(maxIterations, context);
+        ColorGradient colorSampler = new SimpleClampedLinearGradient(
+            0, maxIterations.intValue(), Color.BLACK, Color.WHITE);
+        FractalImageGenerator imageGenerator = new MultiThreadedFractalImageGenerator(
+            fractal, colorSampler, minReal, maxReal, minImaginary, maxImaginary, context);
         BufferedImage image = imageGenerator.generate(width, height);
 
         return ResponseEntity.ok()
